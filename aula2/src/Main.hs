@@ -8,7 +8,7 @@ bools :: [Bool]
 bools = [True,False]
 
 nums :: [[Int]]
-nums = [[1],[2,2][3,3,3]]
+nums = [[1], [2,2], [3,3,3]]
 
 soma :: Int -> Int -> Int -> Int
 soma x y z = x + y + z

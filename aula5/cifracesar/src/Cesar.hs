@@ -10,12 +10,17 @@ int2let :: Int -> Char
 int2let n = chr (ord 'a' + n)
 
 table :: [Float]
-table = [8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1, 7.0,
-  0.2, 0.8, 4.0, 2.4, 6.7, 7.5, 1.9, 0.1, 6.0,
-  6.3, 9.0, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1]
+table = [8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1,
+  7.0, 0.2, 0.8, 4.0, 2.4, 6.7, 7.5, 1.9, 0.1,
+  6.0, 6.3, 9.0, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1]
+
+isLower2 :: Char -> Bool
+isLower2 x = x >= 'a' && x <= 'z'
 
 shift :: Int -> Char -> Char
-shift n c = int2let ((let2int c + n) `mod` 26)
+shift n c 
+  | isLower2 c = int2let ((let2int c + n) `mod` 26)
+  | otherwise = c
 
 encode :: Int -> String -> String
 encode n = map (shift n)
@@ -29,7 +34,7 @@ crack xs = encode (-factor) xs
 
 -- quantidade de letras minúsculas em uma String
 lowers :: String -> Int
-lowers cs = length $ filter (\c -> c >= 0 && c <= 25) $ map let2int cs
+lowers cs = length $ filter isLower2 cs
 
 -- conta a ocorrência de um caracter em uma String
 count :: Char -> String -> Int
@@ -44,14 +49,14 @@ percent n m = 100.0 * fromIntegral n / fromIntegral m
 -- a porcentagem é a contagem de ocorrência pelo total
 -- de letras minúsculas
 freqs :: String -> [Float]
-freqs cs = map (\c -> percent (count c cs) (length cs)) cs
+freqs cs = map (\c -> percent (count c cs) (length cs)) ['a'..'z']
 
 -- Calcule a medida de Chi-Quadrado de duas
 -- tabelas de frequência:
 -- Soma (Observado - Esperado)^2 / Esperado
 chisqr :: [Float] -> [Float] -> Float
-chisqr obs expec = sum $ zipWith error obs expec
-  where error obs expec = (obs - expec) ^ 2 / expec
+chisqr ys xs = sum $ zipWith error ys xs
+  where error y x = (y - x) ^ 2 / x
 
 -- rotaciona uma tabela em n posições
 rotate :: Int -> [a] -> [a]
@@ -60,10 +65,4 @@ rotate n xs = drop n xs ++ take n xs
 -- retorna a lista de posições que contém um
 -- elemento x
 positions :: Eq a => a -> [a] -> [Int]
-
-
-
-
-
-
-
+positions e xs = [i | (x, i) <- zip xs [0..], e == x]

@@ -1,18 +1,18 @@
 module Main where
-import Test.QuickCheck
-import Cesar
-import Test
 
-main :: IO ()
-  main = do
-
-  let code = encode 3 "adoro haskell"
-  dec = encode (-3) code
-  cracked = crack code
-
-  print ("Codificado: " ++ code)
-  print ("Decodificado: " ++ dec)
-  print ("Crackeado: " ++ cracked)
+  import Test.QuickCheck
+  import Cesar
+  import Test
   
-  quickCheck prop_neg_shift
-  quickCheck prop_enc_length
+  main :: IO ()
+  main = do
+    let code = encode 3 "adoro haskell"
+        dec = encode (-3) code
+        cracked = crack code
+    print("Codificado: " ++ code)
+    print("Decodificado: " ++ dec)
+    print("Crackeado: " ++ cracked)
+    quickCheck prop_neg_shift
+    quickCheck prop_enc_length
+    quickCheck prop_enc_dec
+  
